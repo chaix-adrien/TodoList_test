@@ -6,12 +6,12 @@ import { useMutation } from "@apollo/client"
 
 export default function App() {
   const { loading, error, data } = useQuery(Query.GET_LISTS)
-  const [createList] = useMutation(Query.CREATE_LIST, {
+  const [createList, createListState] = useMutation(Query.CREATE_LIST, {
     refetchQueries: [Query.GET_LISTS],
     update(cache, mutationResult) {
       cache.modify({
         fields: {
-          lists: (previous, second) => [...previous, second.toReference(mutationResult.data.createList)],
+          lists: (previous, second) => [...previous, second.toReference({ ...mutationResult.data.createList, fake: true })],
         },
       })
     },
@@ -44,7 +44,7 @@ export default function App() {
               createList({
                 variables: { title: filter },
                 optimisticResponse: {
-                  createList: { __typename: "List", _id: "temp_id" + Math.random(), title: filter, tasks: [] },
+                  createList: { __typename: "List", _id: "temporary" + Math.random(), title: filter, tasks: [] },
                 },
               })
               setFilter("")

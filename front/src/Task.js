@@ -6,12 +6,15 @@ const iconStyle = {
 
 export default function Task(props) {
   const { task } = props
+  const fake = task._id.includes("temporary")
   return (
     <div className="container">
       <h4 className="title">{task.title}</h4>
-      <div className="icon-container" onClick={props.delete}>
-        <MdDeleteForever style={iconStyle} />
-      </div>
+      {!fake && (
+        <div className="icon-container" onClick={props.delete}>
+          <MdDeleteForever style={iconStyle} />
+        </div>
+      )}
       <style jsx>{`
         .container {
           background-color: white;

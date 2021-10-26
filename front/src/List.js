@@ -13,10 +13,10 @@ const iconStyle = {
 
 export default function List(props) {
   const { list } = props
+  const fake = list._id.includes("temporary")
   const [newTitle, setNewTitle] = useState("")
   const [deleteTask] = useMutation(Query.DELETE_TASK)
   const [createTask] = useMutation(Query.CREATE_TASK)
-
   const onCreateTask = function () {
     createTask({
       variables: { title: newTitle, listId: list._id },
@@ -29,14 +29,15 @@ export default function List(props) {
     })
     setNewTitle("")
   }
-
   return (
     <div className="container">
       <div className="top">
         <h1 className="title">{list.title}</h1>
-        <div className="icon-container" onClick={props.delete}>
-          <MdDeleteForever style={iconStyle} />
-        </div>
+        {!fake && (
+          <div className="icon-container" onClick={props.delete}>
+            <MdDeleteForever style={iconStyle} />
+          </div>
+        )}
       </div>
       <div className="list-container">
         {list.tasks.map((task) => (
