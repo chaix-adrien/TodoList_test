@@ -2,7 +2,6 @@ const router = require("express").Router()
 const db = require("../database")
 const { ObjectId } = require("mongodb")
 const List = db.models.List
-const Task = db.models.Task
 
 router.post("/", async (req, res) => {
   try {
@@ -12,7 +11,7 @@ router.post("/", async (req, res) => {
     list.tasks.push({ title: req.body.title })
     list.save(function (err) {
       if (err) return res.status(400).json(err)
-      return res.json(list.tasks[list.tasks.length - 1])
+      return res.json(list)
     })
   } catch (e) {
     res.status(400).json({ error: "invalid ListId" })

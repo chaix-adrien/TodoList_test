@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const newList = new List({ title: req.body.title })
-  newList.save(function (err) {
+  newList.save(async function (err) {
     if (err) return res.status(400).json(err)
     return res.json(newList)
   })
@@ -20,11 +20,13 @@ router.post("/", async (req, res) => {
 
 router.delete("/:listId", async (req, res) => {
   try {
-    await List.findByIdAndDelete(ObjectId(req.params.listId))
+    const list = await List.findById(ObjectId(req.params.listId))
+    if (!list) throw "not found"
+    await list.delete()
+    return res.json(list)
   } catch (e) {
     return res.status(400).json({ error: "invalid listId" })
   }
-  return res.json(true)
 })
 
 module.exports = router

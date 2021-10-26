@@ -15,9 +15,9 @@ const typeDefs = gql`
   }
   type Mutation {
     createList(title: String): List
-    createTask(title: String, listId: ID!): Task
+    deleteList(listId: ID!): List
+    createTask(title: String, listId: ID!): List
     deleteTask(taskId: ID!): List
-    deleteList(listId: ID!): Boolean
   }
 `
 
